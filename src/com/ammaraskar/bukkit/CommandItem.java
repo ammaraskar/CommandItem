@@ -1,6 +1,5 @@
 package com.ammaraskar.bukkit;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -30,9 +30,7 @@ public class CommandItem extends JavaPlugin implements Listener, CommandExecutor
 
     @EventHandler(ignoreCancelled = true)
     public void onCommandPreProcess(PlayerCommandPreprocessEvent event) {
-        getLogger().info("Processing " + event.getPlayer().getName() + "'s command of:");
         String[] args = event.getMessage().substring(1, event.getMessage().length()).split(" ");
-        getLogger().info(Arrays.deepToString(args));
 
         if (args.length > 0) {
             if ((getConfig().contains("commands." + args[0])) && (event.getPlayer().getItemInHand().getTypeId() != getConfig().getInt("commands." + args[0]))) {
@@ -54,10 +52,11 @@ public class CommandItem extends JavaPlugin implements Listener, CommandExecutor
         for (String key : getConfig().getKeys(true)) {
             if (key.startsWith("commands.")) {
                 if (Material.getMaterial(getConfig().getInt(key)) == null || key.length() < 9) {
-                    if (sender != null) {
-                        sender.sendMessage("Invalid id or key at '" + key + "' value of '" + getConfig().getInt(key) + "'");
+                    if (sender != null && !(sender instanceof ConsoleCommandSender)) {
+                        sender.sendMessage("Ignoring invalid id or key at '" + key + "' value of '" + getConfig().get(key) + "'");
                     }
-                    getLogger().warning("Invalid id or key at '" + key + "' value of '" + getConfig().getInt(key) + "'");
+                    getLogger().warning("Ignoring invalid id or key at '" + key + "' value of '" + getConfig().get(key) + "'");
+                    continue;
                 }
                 String command = key.substring(9);
                 if (getConfig().getString("messages." + command) != null) { 
