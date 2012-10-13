@@ -1,0 +1,8 @@
+# Example usage
+#
+# commands:
+#   tp: 37
+# messages:
+#    tp: "You must be far more awesome to tp :3"
+#
+# Where 37 represents the item id they need to be holding

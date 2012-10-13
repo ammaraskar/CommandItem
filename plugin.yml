@@ -1,0 +1,9 @@
+name: CommandItem
+main: com.ammaraskar.bukkit.CommandItem
+version: 0.1
+author: ammar2
+description: Link an item to a command
+commands:
+  commanditem:
+    description: administrative commands
+    permission: commanditem.admin
